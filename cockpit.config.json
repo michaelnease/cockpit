@@ -1,0 +1,103 @@
+{
+  "aws": {
+    "region": "us-east-1",
+    "profile": "default"
+  },
+  "environments": {
+    "prod": {
+      "name": "prod",
+      "urls": {
+        "site": "https://northwind.ai",
+        "www": "https://www.northwind.ai",
+        "admin": "https://admin.northwind.ai"
+      },
+      "ecs": {
+        "clusterName": "northwind-prod",
+        "services": ["northwind-ui-prod", "admin-ui-prod"]
+      },
+      "route53": {
+        "hostedZoneDomain": "northwind.ai",
+        "records": [
+          { "name": "northwind.ai", "required": true },
+          { "name": "www.northwind.ai", "required": true },
+          { "name": "admin.northwind.ai", "required": true }
+        ]
+      },
+      "acm": {
+        "requiredHostnames": ["northwind.ai", "www.northwind.ai", "admin.northwind.ai"]
+      },
+      "ssmRequiredParameters": [
+        "/northwind/prod/auth/otp/email-from",
+        "/northwind/prod/openai/api-key",
+        "/northwind/prod/posthog/key",
+        "/northwind/prod/honeybadger/api-key"
+      ],
+      "secretsManagerRequiredSecrets": [],
+      "ses": {
+        "fromEmail": "hello@northwind.ai",
+        "domain": "northwind.ai"
+      },
+      "dynamodbTables": ["northwind-auth-challenges-prod"],
+      "analytics": {
+        "pages": [
+          {
+            "name": "Marketing homepage analytics",
+            "url": "https://northwind.ai",
+            "markers": [
+              { "name": "PostHog", "substring": "posthog", "required": false },
+              { "name": "Honeybadger", "substring": "honeybadger", "required": false },
+              { "name": "Google Analytics", "substring": "googletagmanager", "required": false }
+            ]
+          }
+        ]
+      },
+      "smokeTests": [
+        {
+          "name": "Marketing homepage",
+          "url": "https://northwind.ai",
+          "expectedStatus": 200
+        },
+        {
+          "name": "Hello page",
+          "url": "https://northwind.ai/hello",
+          "expectedStatus": 200
+        },
+        {
+          "name": "Contact page",
+          "url": "https://northwind.ai/contact",
+          "expectedStatus": 200
+        },
+        {
+          "name": "Admin homepage",
+          "url": "https://admin.northwind.ai",
+          "expectedStatus": 200
+        },
+        {
+          "name": "www redirects to apex",
+          "url": "https://www.northwind.ai",
+          "expectedStatus": 200,
+          "expectedFinalUrl": "https://northwind.ai/"
+        }
+      ]
+    },
+    "dev": {
+      "name": "dev",
+      "urls": {},
+      "ecs": {
+        "clusterName": "northwind-dev",
+        "services": ["northwind-ui-dev", "admin-ui-dev"]
+      },
+      "route53": {
+        "hostedZoneDomain": "northwind.ai",
+        "records": []
+      },
+      "acm": {
+        "requiredHostnames": []
+      },
+      "ssmRequiredParameters": [],
+      "secretsManagerRequiredSecrets": [],
+      "dynamodbTables": [],
+      "smokeTests": []
+    }
+  }
+}

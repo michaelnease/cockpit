@@ -1,0 +1,37 @@
+{
+  "name": "local-deployment-cockpit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "cockpit": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "cockpit": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-acm": "^3.812.0",
+    "@aws-sdk/client-dynamodb": "^3.812.0",
+    "@aws-sdk/client-ecs": "^3.812.0",
+    "@aws-sdk/client-route-53": "^3.812.0",
+    "@aws-sdk/client-secrets-manager": "^3.812.0",
+    "@aws-sdk/client-sesv2": "^3.812.0",
+    "@aws-sdk/client-ssm": "^3.812.0",
+    "@aws-sdk/credential-providers": "^3.812.0",
+    "commander": "^12.1.0",
+    "zod": "^3.24.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.18",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.3"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@9.15.9"
+}
